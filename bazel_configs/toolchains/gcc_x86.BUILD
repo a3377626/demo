@@ -12,7 +12,7 @@ filegroup(
         ":ar_files",
         ":compiler_files",
         ":linker_files",
-    ],
+    ] + glob(["**/*"]),
 )
 
 filegroup(

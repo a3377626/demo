@@ -12,6 +12,7 @@ def wrap_path(prefix, name, path):
 
 def _impl_gcc_x86_toolchain(ctx):
     prefix = ctx.attr.toolchain_reference.label.workspace_root
+    print(prefix)
     tool_paths = [
         wrap_path(prefix, name = "gcc", path = "bin/x86_64-buildroot-linux-gnu-gcc"),
         wrap_path(prefix, name = "g++", path = "bin/x86_64-buildroot-linux-gnu-g++"),
@@ -26,8 +27,7 @@ def _impl_gcc_x86_toolchain(ctx):
         wrap_path(prefix, name = "objcopy", path = "bin/x86_64-buildroot-linux-gnu-objcopy"),
         wrap_path(prefix, name = "strip", path = "bin/x86_64-buildroot-linux-gnu-strip"),
     ]
-
-    gcc_x86_compiles_flags = CPU_CONFIGS[CPU_NAMES.gcc_x86].default_compilation_flags
+    
     gcc_x86_cpponly_compiles_flags = CPU_CONFIGS[CPU_NAMES.gcc_x86].default_cpp_only_compilation_flags
 
     gcc_x86_link_flags = CPU_CONFIGS[CPU_NAMES.gcc_x86].default_linker_flags
@@ -37,7 +37,13 @@ def _impl_gcc_x86_toolchain(ctx):
         prefix + "/lib/gcc/",
         prefix + "/x86_64-buildroot-linux-gnu/include",
         prefix + "/x86_64-buildroot-linux-gnu/sysroot/usr/include/",
+        prefix + "/x86_64-buildroot-linux-gnu/include/c++",
+        prefix + "/x86_64-buildroot-linux-gnu/include/c++/12.3.0",
+        prefix + "/x86_64-buildroot-linux-gnu/include/c++/12.3.0/x86_64-buildroot-linux-gnu/bits/",
+        prefix + "/x86_64-buildroot-linux-gnu/include/c++/12.3.0/x86_64-buildroot-linux-gnu",
+        prefix + "/lib/gcc/x86_64-buildroot-linux-gnu/12.3.0/include/"
     ]
+    gcc_x86_compiles_flags = CPU_CONFIGS[CPU_NAMES.gcc_x86].default_compilation_flags + ["-isystem" + x for x in cxx_builtin_include_directories]
 
     sysroot = prefix + "/x86_64-buildroot-linux-gnu/sysroot"
     print('cxx_builtin_include_directories: {}'.format(cxx_builtin_include_directories))
@@ -97,11 +103,11 @@ def register_gcc_x86_toolchain():
       name = "cc_toolchain_gcc_x86",
       all_files = "@gcc_x86//:all_files",
       ar_files = "@gcc_x86//:ar_files",
-      compiler_files = "@gcc_x86//:compiler_files",
-      dwp_files = "@gcc_x86//:empty",
-      linker_files = "@gcc_x86//:linker_files",
-      objcopy_files = "@gcc_x86//:objcopy_files",
-      strip_files = "@gcc_x86//:strip_files",
+      compiler_files = "@gcc_x86//:all_files",
+      dwp_files = "@gcc_x86//:all_files",
+      linker_files = "@gcc_x86//:all_files",
+      objcopy_files = "@gcc_x86//:all_files",
+      strip_files = "@gcc_x86//:all_files",
       toolchain_config = ":gcc_x86_toolchain_config",
       toolchain_identifier = "gcc_x86_toolchain_config",
     )
