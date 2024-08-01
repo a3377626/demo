@@ -1,0 +1,3 @@
+# Test
+
+`bazel build //:main`

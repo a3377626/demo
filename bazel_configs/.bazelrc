@@ -1,0 +1,7 @@
+build:linux-x86 --cpu=k8 --platforms=@bazel_configs//:linux-x86 --action_env=PLATFORM=X86
+
+build --crosstool_top=//:toolchains
+build --host_crosstool_top=@bazel_tools//tools/cpp:toolchain
+build --host_platform=@local_config_platform//:host
+build --incompatible_allow_tags_propagation
+build --strategy_regexp=CMake=remote,local
