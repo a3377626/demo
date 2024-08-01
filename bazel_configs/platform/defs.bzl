@@ -22,7 +22,7 @@ CPU_CONFIGS = {
             "-DBAZEL_COMPILE",
         ],
         default_linker_flags = [
-            "-fuse-ld=gold", # use gold-linker
+            #"-fuse-ld=gold", # use gold-linker
             "-lpthread",
             "-lstdc++",
             "-ldl",
