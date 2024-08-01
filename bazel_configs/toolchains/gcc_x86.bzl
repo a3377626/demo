@@ -27,8 +27,6 @@ def _impl_gcc_x86_toolchain(ctx):
         wrap_path(prefix, name = "objcopy", path = "bin/x86_64-buildroot-linux-gnu-objcopy"),
         wrap_path(prefix, name = "strip", path = "bin/x86_64-buildroot-linux-gnu-strip"),
     ]
-
-    gcc_x86_compiles_flags = CPU_CONFIGS[CPU_NAMES.gcc_x86].default_compilation_flags + ["-isystem%s" % prefix + "/x86_64-buildroot-linux-gnu/include/c++/12.3.0/x86_64-buildroot-linux-gnu/", "-isystem%s" % prefix + "/x86_64-buildroot-linux-gnu/include/c++/12.3.0", "-isystem%s" % prefix + "/lib/gcc/x86_64-buildroot-linux-gnu/12.3.0/include/"]
     
     gcc_x86_cpponly_compiles_flags = CPU_CONFIGS[CPU_NAMES.gcc_x86].default_cpp_only_compilation_flags
 
@@ -45,6 +43,7 @@ def _impl_gcc_x86_toolchain(ctx):
         prefix + "/x86_64-buildroot-linux-gnu/include/c++/12.3.0/x86_64-buildroot-linux-gnu",
         prefix + "/lib/gcc/x86_64-buildroot-linux-gnu/12.3.0/include/"
     ]
+    gcc_x86_compiles_flags = CPU_CONFIGS[CPU_NAMES.gcc_x86].default_compilation_flags + ["-isystem" + x for x in cxx_builtin_include_directories]
 
     sysroot = prefix + "/x86_64-buildroot-linux-gnu/sysroot"
     print('cxx_builtin_include_directories: {}'.format(cxx_builtin_include_directories))
